@@ -1,0 +1,345 @@
+{
+  "entities": {
+    "PlayerProfile": {
+      "title": "PlayerProfile",
+      "description": "Public player chess profile without PII, containing ratings and game statistics.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "username": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "avatarUrl": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "elo": {
+          "type": "number"
+        },
+        "puzzleRating": {
+          "type": "number"
+        },
+        "gamesPlayed": {
+          "type": "number"
+        },
+        "wins": {
+          "type": "number"
+        },
+        "losses": {
+          "type": "number"
+        },
+        "draws": {
+          "type": "number"
+        },
+        "solvedPuzzleIds": {
+          "type": "array",
+          "description": "List of solved puzzle IDs (capped at 500)."
+        },
+        "favoriteOpenings": {
+          "type": "array",
+          "description": "List of favorite opening names (capped at 20)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "username",
+        "avatarUrl",
+        "elo",
+        "puzzleRating",
+        "gamesPlayed",
+        "wins",
+        "losses",
+        "draws",
+        "solvedPuzzleIds",
+        "favoriteOpenings",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserPrivateSettings": {
+      "title": "UserPrivateSettings",
+      "description": "Private user settings and PII isolated to the owner.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "boardTheme": {
+          "type": "string",
+          "enum": ["obsidian", "emerald", "walnut", "slate"]
+        },
+        "pieceSet": {
+          "type": "string",
+          "enum": ["staunton", "modern", "classic"]
+        },
+        "soundEnabled": {
+          "type": "boolean"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "boardTheme", "pieceSet", "soundEnabled", "updatedAt"]
+    },
+    "GameRecord": {
+      "title": "GameRecord",
+      "description": "Completed chess game record saved by a participant.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "participantIds": {
+          "type": "array",
+          "description": "UIDs of players who can access this record (max 2)."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["ai", "local", "online", "practice"]
+        },
+        "whiteName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "blackName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "whiteElo": {
+          "type": "number"
+        },
+        "blackElo": {
+          "type": "number"
+        },
+        "playerColor": {
+          "type": "string",
+          "enum": ["w", "b"]
+        },
+        "result": {
+          "type": "string",
+          "enum": ["1-0", "0-1", "1/2-1/2"]
+        },
+        "termination": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "openingName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "pgn": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "finalFen": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 150
+        },
+        "moveCount": {
+          "type": "number"
+        },
+        "accuracyWhite": {
+          "type": "number"
+        },
+        "accuracyBlack": {
+          "type": "number"
+        },
+        "eloDelta": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerId",
+        "participantIds",
+        "mode",
+        "whiteName",
+        "blackName",
+        "whiteElo",
+        "blackElo",
+        "playerColor",
+        "result",
+        "termination",
+        "openingName",
+        "pgn",
+        "finalFen",
+        "moveCount",
+        "eloDelta",
+        "createdAt"
+      ]
+    },
+    "MultiplayerRoom": {
+      "title": "MultiplayerRoom",
+      "description": "Real-time private multiplayer chess room synchronized via Firestore.",
+      "type": "object",
+      "properties": {
+        "roomCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 16,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "hostId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "hostName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "hostElo": {
+          "type": "number"
+        },
+        "guestId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "guestName": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "guestElo": {
+          "type": "number"
+        },
+        "whiteId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "blackId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "enum": ["waiting", "active", "finished"]
+        },
+        "fen": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 150
+        },
+        "pgn": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "turn": {
+          "type": "string",
+          "enum": ["w", "b"]
+        },
+        "lastMoveFrom": {
+          "type": "string",
+          "maxLength": 4
+        },
+        "lastMoveTo": {
+          "type": "string",
+          "maxLength": 4
+        },
+        "timeControlSec": {
+          "type": "number"
+        },
+        "incrementSec": {
+          "type": "number"
+        },
+        "whiteTimeMs": {
+          "type": "number"
+        },
+        "blackTimeMs": {
+          "type": "number"
+        },
+        "lastMoveAtMs": {
+          "type": "number"
+        },
+        "winner": {
+          "type": "string",
+          "enum": ["w", "b", "draw"]
+        },
+        "termination": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "roomCode",
+        "hostId",
+        "hostName",
+        "hostElo",
+        "status",
+        "fen",
+        "pgn",
+        "turn",
+        "lastMoveFrom",
+        "lastMoveTo",
+        "timeControlSec",
+        "incrementSec",
+        "whiteTimeMs",
+        "blackTimeMs",
+        "lastMoveAtMs",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/players/{userId}": {
+      "schema": { "$ref": "#/entities/PlayerProfile" },
+      "description": "Public player profile (no PII) readable by signed-in users and writable only by the owner."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserPrivateSettings" },
+      "description": "Private user PII and preferences strictly isolated to the owner."
+    },
+    "/games/{gameId}": {
+      "schema": { "$ref": "#/entities/GameRecord" },
+      "description": "Completed chess game records owned by a player."
+    },
+    "/rooms/{roomId}": {
+      "schema": { "$ref": "#/entities/MultiplayerRoom" },
+      "description": "Real-time private multiplayer game rooms keyed by room code."
+    }
+  }
+}

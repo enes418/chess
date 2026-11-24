@@ -1,0 +1,8 @@
+{
+  "name": "Chess Arena",
+  "description": "Advanced online chess platform with Stockfish WASM engine analysis, real-time multiplayer rooms, tactical puzzles, and opening explorer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
